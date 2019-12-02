@@ -9,6 +9,12 @@ public interface Stack<E> extends Collection<E> {
     void push(E el);
 
     /**
+     * Get the most recent added element from the stack
+     * @return
+     */
+    E peek();
+
+    /**
      * Remove the most recent added element from the stack
      * @throws java.util.EmptyStackException
      * @return

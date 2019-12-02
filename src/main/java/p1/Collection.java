@@ -4,7 +4,7 @@ package p1;
 public interface Collection<E> extends Iterable<E> {
 
     /**
-     * is the queue empty?
+     * is the collection empty?
      * @return
      */
     boolean isEmpty();

@@ -1,5 +1,7 @@
 package p1;
 
+import common.AppResource;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,6 +29,13 @@ public class LinkedStack<E> implements Stack<E> {
     public void push(E el) {
         head = new Node(el, head);
         N++;
+    }
+
+    @Override
+    public E peek() {
+        if (isEmpty())
+            throw new EmptyStackException();
+        return head.el;
     }
 
     @Override
@@ -66,7 +75,7 @@ public class LinkedStack<E> implements Stack<E> {
     }
 
     private class LinkedNodeIterator<E> implements Iterator<E> {
-        private Node c;
+        private Node c = head;
 
         @Override
         public boolean hasNext() {
@@ -86,11 +95,12 @@ public class LinkedStack<E> implements Stack<E> {
         }
     }
 
-    private static final String TO_BE_FILES = "C:\\Users\\HOMEPC\\IntelliJIDEAProjects\\algorithms_4th\\src\\main\\resources\\algs4-data\\tobe.txt";
+    private static final String TO_BE_FILE = "tobe.txt";
 
     public static void main(String[] args) throws FileNotFoundException {
         Stack<String> stack = new LinkedStack<>();
-        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(new File(TO_BE_FILES))))) {
+        File file = AppResource.getInstance().getFileOf(TO_BE_FILE);
+        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
             while (scanner.hasNext()) {
                 String word = scanner.next();
                 if (!word.equals("-"))
