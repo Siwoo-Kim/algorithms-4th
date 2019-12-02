@@ -1,4 +1,4 @@
-package p1;
+package collection;
 
 import common.AppResource;
 
@@ -10,48 +10,55 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class LinkedQueue<E> implements Queue<E> {
-
-    private class Node {
-        private Node next;
-        private Object val;
-
-        public Node(E el) {
-            this.val = el;
-        }
-    }
-
-    private Node first, last;
+public class ArrayQueue<E> implements Queue<E> {
+    private static final int DEFAULT_CAPACITY = 10;
+    private E[] elements;
     private int N;
+    private int first, last;
+
+    @SuppressWarnings("unchecked")
+    public ArrayQueue() {
+        elements = (E[]) new Object[DEFAULT_CAPACITY];
+    }
 
     @Override
     public void enqueue(E el) {
-        if (last == null)
-            first = last = new Node(el);
-        else {
-            Node old = last;
-            last = new Node(el);
-            old.next = last;
-        }
+        if (N == elements.length)
+            ensureCapacity(elements.length << 1);
+        elements[last++] = el;
+        if (last == elements.length)
+            last = 0;
         N++;
     }
 
     @SuppressWarnings("unchecked")
+    private void ensureCapacity(int capacity) {
+        E[] newArray = (E[]) new Object[capacity];
+        for (int i=0; i<N; i++)
+            newArray[i] = elements[(first + i) % elements.length];
+        elements = newArray;
+        first = 0;
+        last = N;
+    }
+
     @Override
     public E dequeue() {
         if (isEmpty())
             throw new NoSuchElementException();
-        E e = (E) first.val;
-        first = first.next;
-        if (first == null)
-            last = null;
+        E e = elements[first];
+        elements[first] = null; //help GC
+        first++;
         N--;
+        if (first == elements.length)
+            first = 0;
+        if (N > 0 && N == elements.length >> 2)
+            ensureCapacity(elements.length >> 1);
         return e;
     }
 
     @Override
     public boolean isEmpty() {
-        return first == null;
+        return N == 0;
     }
 
     @Override
@@ -60,36 +67,36 @@ public class LinkedQueue<E> implements Queue<E> {
     }
 
     @Override
-    public Iterator<E> iterator() {
-        return new LinkedIterator<>();
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Node c=first; c!=null; c=c.next) {
-            sb.append(c.val);
-            if (c != last)
+        for (int i=0; i<N; i++) {
+            E e = elements[(i + first) % elements.length];
+            sb.append(e);
+            if (i != N-1)
                 sb.append(", ");
         }
-        if (isEmpty())
-            sb.append("(empty)");
         return sb.toString();
     }
 
-    private class LinkedIterator<E> implements Iterator<E> {
-        private Node c = first;
+    @Override
+    public Iterator<E> iterator() {
+        return new ArrayQueueIterator();
+    }
+
+    private class ArrayQueueIterator implements Iterator<E> {
+        private int current = 0;
 
         @Override
         public boolean hasNext() {
-            return c != null;
+            return current < N;
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public E next() {
-            E e = (E) c.val;
-            c = c.next;
+            if (!hasNext())
+                throw new NoSuchElementException();
+            E e = elements[(current + first) % elements.length];
+            current++;
             return e;
         }
 
@@ -100,7 +107,7 @@ public class LinkedQueue<E> implements Queue<E> {
     }
 
     public static void main(String[] args) {
-        Queue<String> q = new LinkedQueue<>();
+        Queue<String> q = new ArrayQueue<>();
         File file = AppResource.getInstance().getFileOf("TO_BE_FILE");
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
             while (scanner.hasNext()) {

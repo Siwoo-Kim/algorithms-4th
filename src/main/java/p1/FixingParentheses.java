@@ -1,5 +1,12 @@
 package p1;
 
+import collection.LinkedQueue;
+import collection.LinkedStack;
+import collection.Queue;
+import collection.Stack;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class FixingParentheses {
 
     private final String exp;
@@ -44,6 +51,6 @@ public class FixingParentheses {
 
     public static void main(String[] args) {
         FixingParentheses fixingParentheses = new FixingParentheses("1+2)*3-4)*5-6)))");
-        System.out.println(fixingParentheses.fix());
+        assertThat(fixingParentheses.fix()).isEqualTo("((1+2)*((3-4)*(5-6)))");
     }
 }

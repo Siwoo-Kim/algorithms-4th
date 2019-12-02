@@ -1,6 +1,7 @@
-package p1;
+package collection;
 
 import common.AppResource;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,9 +9,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.EmptyStackException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Scanner;
 
-public class LinkedStack<E> implements Stack<E> {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class LinkedStack<E> implements Stack<E>, Cloneable {
 
     private Node head;
     private int N;
@@ -95,6 +99,29 @@ public class LinkedStack<E> implements Stack<E> {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public LinkedStack<E> clone() {
+        LinkedStack<E> cloned = superClone();
+        cloned.N = 0;
+        cloned.head = null;
+        E[] elements = (E[]) new Object[N];
+        int i = 0;
+        for (E e: this)
+            elements[i++] = e;
+        for (i=N-1; i>=0; i--)
+            cloned.push(elements[i]);
+        return cloned;
+    }
+
+    private LinkedStack<E> superClone() {
+        try {
+            return (LinkedStack<E>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e);
+        }
+    }
+
     private static final String TO_BE_FILE = "tobe.txt";
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -111,5 +138,20 @@ public class LinkedStack<E> implements Stack<E> {
             System.out.println("(" + stack.size() + " left on the stack)");
             System.out.println(stack);
         }
+
+        testCloneable();
+    }
+
+    private static void testCloneable() {
+        LinkedStack<String> stack = new LinkedStack<>();
+        stack.push("hello");
+        stack.push("stack");
+        stack.push("!");
+        LinkedStack<String> cloned = stack.clone();
+        assertThat(cloned.pop()).isEqualTo("!");
+        assertThat(cloned.pop()).isEqualTo("stack");
+        assertThat(cloned.pop()).isEqualTo("hello");
+        assertThat(cloned.size()).isEqualTo(0);
+        assertThat(stack.size()).isEqualTo(3);
     }
 }

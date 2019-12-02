@@ -1,4 +1,4 @@
-package p1;
+package collection;
 
 
 public interface Queue<E> extends Collection<E> {

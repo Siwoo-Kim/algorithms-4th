@@ -1,5 +1,11 @@
 package p1;
 
+import collection.Collection;
+import collection.LinkedStack;
+import collection.Stack;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class Bits {
 
     private final int num;
@@ -25,12 +31,10 @@ public class Bits {
 
     public static void main(String[] args) {
         Bits bits = new Bits(50);
-        System.out.println(bits.toBits()); //110010
+        assertThat(bits.toBits()).containsExactly(1, 1, 0, 0, 1, 0);
         bits = new Bits(0);
-        System.out.println(bits.toBits());  //0
+        assertThat(bits.toBits()).containsExactly(0);
         bits = new Bits(31);
-        System.out.println(bits.toBits());  //11111
-
-
+        assertThat(bits.toBits()).containsExactly(1, 1, 1, 1, 1);
     }
 }

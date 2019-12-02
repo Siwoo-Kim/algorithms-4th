@@ -1,10 +1,9 @@
-package p1;
+package collection;
 
 import common.AppResource;
 
 import java.io.File;
 import java.io.FileReader;
-import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.Scanner;
 

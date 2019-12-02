@@ -1,5 +1,10 @@
 package p1;
 
+import collection.ArrayStack;
+import collection.Stack;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class Evaluate {
 
     private final String exp;
@@ -36,6 +41,10 @@ public class Evaluate {
 
     public static void main(String[] args) {
         Evaluate evaluate = new Evaluate("(1+((2+3)*(4*5)))");
-        System.out.println(evaluate.eval());
+        assertThat(evaluate.eval()).isEqualTo(101.0);
+        evaluate = new Evaluate("((2+3)*(4*5))");
+        assertThat(evaluate.eval()).isEqualTo(100.0);
+        evaluate = new Evaluate("(4*5)");
+        assertThat(evaluate.eval()).isEqualTo(20.0);
     }
 }

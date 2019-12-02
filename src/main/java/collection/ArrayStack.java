@@ -1,4 +1,4 @@
-package p1;
+package collection;
 
 import common.AppResource;
 
@@ -36,7 +36,6 @@ public class ArrayStack<E> implements Stack<E> {
             newArray[i] = elements[i];
         elements = newArray;
     }
-
 
     @Override
     public E peek() {
@@ -107,11 +106,11 @@ public class ArrayStack<E> implements Stack<E> {
         return sb.toString();
     }
 
-    private static final String TO_BE_FILES = "C:\\Users\\HOMEPC\\IntelliJIDEAProjects\\algorithms_4th\\src\\main\\resources\\algs4-data\\tobe.txt";
+    private static final String TO_BE_FILES = "tobe.txt";
 
     public static void main(String[] args) throws FileNotFoundException {
         Stack<String> stack = new ArrayStack<>();
-        File file = AppResource.getInstance().getFileOf("tobe.txt");
+        File file = AppResource.getInstance().getFileOf(TO_BE_FILES);
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
             while (scanner.hasNext()) {
                 String word = scanner.next();

@@ -1,5 +1,8 @@
 package p1;
 
+import collection.LinkedStack;
+import collection.Stack;
+
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
