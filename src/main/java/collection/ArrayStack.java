@@ -67,14 +67,14 @@ public class ArrayStack<E> implements Stack<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new ReverseArrayIterator<>();
+        return new ReverseArrayIterator();
     }
 
     private boolean isFull() {
         return N == elements.length;
     }
 
-    private class ReverseArrayIterator<E> implements Iterator<E> {
+    private class ReverseArrayIterator implements Iterator<E> {
         private int i = N;
 
         @Override
@@ -82,8 +82,11 @@ public class ArrayStack<E> implements Stack<E> {
             return i > 0;
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public E next() {
+            if (!hasNext())
+                throw new EmptyStackException();
             return (E) elements[--i];
         }
 

@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class P151 {
 
     private static final String FILE = "p151.txt";
+
     @Test
     public void test() {
         File file = AppResource.getInstance().getFileOf(FILE);

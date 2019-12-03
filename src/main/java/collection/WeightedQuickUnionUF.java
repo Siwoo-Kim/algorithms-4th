@@ -44,7 +44,6 @@ public class WeightedQuickUnionUF implements UF {
             sizes[rootP] += sizes[rootQ];
         }
         N--;
-
     }
 
     @Override
