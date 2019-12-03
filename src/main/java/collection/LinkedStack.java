@@ -1,7 +1,6 @@
 package collection;
 
-import common.AppResource;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
+import app.AppResource;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.EmptyStackException;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;

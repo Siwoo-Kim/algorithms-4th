@@ -1,9 +1,8 @@
 package p2;
 
 import collection.QuickFindUF;
-import collection.QuickUnionUF;
 import collection.UF;
-import common.AppResource;
+import app.AppResource;
 import org.junit.Test;
 
 import java.io.BufferedReader;

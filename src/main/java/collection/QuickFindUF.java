@@ -1,6 +1,6 @@
 package collection;
 
-import common.AppResource;
+import app.AppResource;
 
 import java.io.BufferedReader;
 import java.io.File;

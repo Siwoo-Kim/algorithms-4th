@@ -2,7 +2,7 @@ package p1;
 
 import collection.LinkedQueue;
 import collection.Queue;
-import common.AppResource;
+import app.AppResource;
 import domain.Date;
 
 import java.io.File;
