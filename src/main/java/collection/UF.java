@@ -1,5 +1,11 @@
 package collection;
 
+/**
+ * The interface represents a union-find data structure.
+ * It supports the <em>union</em> and <em>find</em> operations, along with
+ * methods for determining whether two nodes are in the same component.
+ *
+ */
 public interface UF {
 
     /**
