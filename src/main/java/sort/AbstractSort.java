@@ -1,6 +1,7 @@
 package sort;
 
 import static com.google.common.base.Preconditions.checkElementIndex;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstractSort<E extends Comparable<E>> implements Sort<E> {
 
@@ -26,10 +27,17 @@ public abstract class AbstractSort<E extends Comparable<E>> implements Sort<E> {
      */
     public abstract void executeSort();
 
+    //do not use. make bug
+    @Deprecated
     boolean less(int aIndex, int bIndex) {
         checkElementIndex(aIndex, N);
         checkElementIndex(bIndex, N);
         return elements[aIndex].compareTo(elements[bIndex]) < 0;
+    }
+
+    boolean less(E a, E b) {
+        checkNotNull(a, b);
+        return a.compareTo(b) < 0;
     }
 
     void exchange(int aIndex, int bIndex) {

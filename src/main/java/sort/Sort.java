@@ -41,6 +41,10 @@ public interface Sort<E> {
             return new InsertionSort<>(elements);
         if ("Shell".equalsIgnoreCase(alg))
             return new ShellSort<>(elements);
+        if ("Merge".equalsIgnoreCase(alg))
+            return new MergeSort<>(elements);
+        if ("Quick".equalsIgnoreCase(alg))
+            return new QuickSort<>(elements);
         throw new UnsupportedOperationException();
     }
 }
