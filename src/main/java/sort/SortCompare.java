@@ -17,19 +17,18 @@ class SortCompare {
     }
 
     /**
-     * Timing executing time of the given sorting algorithms
-     * with random input.
+     * Timing executing time of the given sorting algorithms with random input.
      *
      * @param alg
-     * @param N number of elements
-     * @param T times to perform sorting
+     * @param N   number of elements
+     * @param T   times to perform sorting
      * @return
      */
     static double timingRandomInput(String alg, int N, int T) {
         Double[] a = new Double[N];
         double sum = 0;
-        for (int i=0; i<T; i++) {
-            for (int j=0; j<N; j++)
+        for (int i = 0; i < T; i++) {
+            for (int j = 0; j < N; j++)
                 a[j] = Random.uniform();
             sum += timing(alg, a);
         }
@@ -37,13 +36,12 @@ class SortCompare {
     }
 
     /**
-     * Comparing executing time of the given two sorting algorithms
-     * with random input.
+     * Comparing executing time of the given two sorting algorithms with random input.
      *
      * @param alg1 an algorithm
      * @param alg2 an algorithm to compare
-     * @param N number of elements
-     * @param T times to perform sorting
+     * @param N    number of elements
+     * @param T    times to perform sorting
      * @return
      */
     static void compare(String alg1, String alg2, int N, int T) {

@@ -3,7 +3,7 @@ package sort;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Provide sort mechanism.
+ * Sorts a sequence of elements in given array.
  */
 public interface Sort<E> {
 
@@ -30,7 +30,7 @@ public interface Sort<E> {
      * @param alg
      * @param elements
      * @param <E>
-     * @throws UnsupportedOperationException throws if alg is unknown
+     * @throws UnsupportedOperationException throws if given alg is unknown
      * @return
      */
     static <E extends Comparable<E>> Sort<E> create(String alg, E[] elements) {

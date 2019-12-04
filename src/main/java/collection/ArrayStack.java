@@ -109,11 +109,11 @@ public class ArrayStack<E> implements Stack<E> {
         return sb.toString();
     }
 
-    private static final String TO_BE_FILES = "tobe.txt";
+    private static final String TO_BE_FILE = "tobe.txt";
 
     public static void main(String[] args) throws FileNotFoundException {
         Stack<String> stack = new ArrayStack<>();
-        File file = AppResource.getInstance().getFileOf(TO_BE_FILES);
+        File file = AppResource.getInstance().getFile(TO_BE_FILE);
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
             while (scanner.hasNext()) {
                 String word = scanner.next();

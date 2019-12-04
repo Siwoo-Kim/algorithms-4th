@@ -12,8 +12,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class AppResource {
     private static final AppResource SINGLETON = new AppResource();
+
     private static Properties FILE_PROPERTIES;
-    private static final String APP_FILES_LOCATION = ".\\src" +
+    private static final String RESOURCE_ROOT = "./src/main/resources";
+    private static final String APP_FILE_PROPERTIES = ".\\src" +
             "\\main\\resources\\app-files.properties";
 
     private AppResource() { }
@@ -22,17 +24,17 @@ public class AppResource {
         return SINGLETON;
     }
 
-    public File getFileOf(String fileName) {
+    public File getFile(String fileName) {
         String loc = appProperties().getProperty(fileName);
         checkNotNull(loc, String.format("Resource [%s] isn't defined", fileName));
-        Path p = Paths.get(loc);
+        Path p = Paths.get(RESOURCE_ROOT, loc);
         checkArgument(p.toFile().exists(), "File Resource [%s] cannot find.", fileName);
         return p.toFile();
     }
 
     private Properties appProperties() {
         if (FILE_PROPERTIES == null) {
-            try (FileInputStream in = new FileInputStream(new File(APP_FILES_LOCATION))) {
+            try (FileInputStream in = new FileInputStream(new File(APP_FILE_PROPERTIES))) {
                 FILE_PROPERTIES = new Properties();
                 FILE_PROPERTIES.load(in);
             } catch (IOException e) {

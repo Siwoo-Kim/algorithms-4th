@@ -38,7 +38,7 @@ public class ReadAllDates {
     private static final String DATE_FILE = "dates.txt";
 
     public static void main(String[] args) throws FileNotFoundException {
-        File file = AppResource.getInstance().getFileOf(DATE_FILE);
+        File file = AppResource.getInstance().getFile(DATE_FILE);
         Date[] dates = readAllDates(new Scanner(new FileReader(file)));
         assertThat(dates[0]).isEqualTo(Date.of(1989, 3, 4));
         assertThat(dates[3]).isEqualTo(Date.of(1945, 8, 15));

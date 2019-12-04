@@ -63,7 +63,7 @@ public class WeightedQuickUnionUF implements UF {
     private static final String LARGE_UF_FILE = "largeUF.txt";
 
     public static void main(String[] args) {
-        File file = AppResource.getInstance().getFileOf(LARGE_UF_FILE);
+        File file = AppResource.getInstance().getFile(LARGE_UF_FILE);
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
             int N = scanner.nextInt();
             UF UF = new WeightedQuickUnionUF(N);

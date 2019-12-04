@@ -20,7 +20,7 @@ public class P151 {
 
     @Test
     public void test() {
-        File file = AppResource.getInstance().getFileOf(FILE);
+        File file = AppResource.getInstance().getFile(FILE);
         UF UF = null;
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
             int N = scanner.nextInt();

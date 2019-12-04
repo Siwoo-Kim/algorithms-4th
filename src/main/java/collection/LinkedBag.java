@@ -34,7 +34,7 @@ public class LinkedBag<E> implements Bag<E> {
     private static final String STATS_FILE = "stats.txt";
 
     public static void main(String[] args) {
-        File file = AppResource.getInstance().getFileOf(STATS_FILE);
+        File file = AppResource.getInstance().getFile(STATS_FILE);
         Bag<Integer> bag = new LinkedBag<>();
         try (Scanner scanner = new Scanner(new FileReader(file))) {
             while (scanner.hasNextInt()) {

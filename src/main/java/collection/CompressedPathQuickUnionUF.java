@@ -59,7 +59,7 @@ public class CompressedPathQuickUnionUF implements UF {
     private static final String TINY_UF_FILE = "tinyUF.txt";
 
     public static void main(String[] args) {
-        File file = AppResource.getInstance().getFileOf(TINY_UF_FILE);
+        File file = AppResource.getInstance().getFile(TINY_UF_FILE);
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
             int N = scanner.nextInt();
             UF UF = new CompressedPathQuickUnionUF(N);

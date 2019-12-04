@@ -106,9 +106,11 @@ public class ArrayQueue<E> implements Queue<E> {
         }
     }
 
+    private static final String TO_BE_FILE = "tobe.txt";
+
     public static void main(String[] args) {
         Queue<String> q = new ArrayQueue<>();
-        File file = AppResource.getInstance().getFileOf("TO_BE_FILE");
+        File file = AppResource.getInstance().getFile(TO_BE_FILE);
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
             while (scanner.hasNext()) {
                 String word = scanner.next();

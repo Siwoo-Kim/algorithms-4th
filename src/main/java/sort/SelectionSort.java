@@ -1,6 +1,6 @@
 package sort;
 
-import app.In;
+import app.AppIn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,7 +27,7 @@ public class SelectionSort<E extends Comparable<E>> extends AbstractSort<E> {
     private static final String WORDS3_FILE = "words3.txt";
 
     public static void main(String[] args) {
-        String[] a = In.getInstance().readAllStrings(WORDS3_FILE);
+        String[] a = AppIn.getInstance().readAllStrings(WORDS3_FILE);
         Sort<String> sort = Sort.create("selection", a);
         assertThat(sort).isInstanceOf(SelectionSort.class);
         sort.execute();

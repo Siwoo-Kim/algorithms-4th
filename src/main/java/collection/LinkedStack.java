@@ -124,7 +124,7 @@ public class LinkedStack<E> implements Stack<E>, Cloneable {
 
     public static void main(String[] args) throws FileNotFoundException {
         Stack<String> stack = new LinkedStack<>();
-        File file = AppResource.getInstance().getFileOf(TO_BE_FILE);
+        File file = AppResource.getInstance().getFile(TO_BE_FILE);
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
             while (scanner.hasNext()) {
                 String word = scanner.next();

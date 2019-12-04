@@ -3,7 +3,7 @@ package domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Date {
+public class Date implements Comparable<Date> {
     private final int month;
     private final int day;
     private final int year;
@@ -36,6 +36,7 @@ public class Date {
         return month + "/" + day + "/" + year;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,5 +50,16 @@ public class Date {
     @Override
     public int hashCode() {
         return Objects.hash(month, day, year);
+    }
+
+    @Override
+    public int compareTo(Date d) {
+        if (year < d.year) return -1;
+        if (year > d.year) return 1;
+        if (month < d.month) return -1;
+        if (month > d.month) return 1;
+        if (day < d.day) return -1;
+        if (day > d.day) return 1;
+        else return 0;
     }
 }
