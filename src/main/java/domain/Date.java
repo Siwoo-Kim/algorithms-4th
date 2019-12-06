@@ -3,6 +3,8 @@ package domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 public class Date implements Comparable<Date> {
     private final int month;
     private final int day;
@@ -16,6 +18,15 @@ public class Date implements Comparable<Date> {
 
     public static Date of(int year, int month, int day) {
         LocalDate.of(year, month, day); //validation
+        return new Date(year, month, day);
+    }
+
+    public static Date from(String date) {
+        String[] fields = date.split("/");
+        checkArgument(fields.length == 3);
+        int month = Integer.parseInt(fields[0]);
+        int day   = Integer.parseInt(fields[1]);
+        int year  = Integer.parseInt(fields[2]);
         return new Date(year, month, day);
     }
 

@@ -12,7 +12,14 @@ public interface Queue<E> extends Collection<E> {
     /**
      * Remove the oldest element from the queue
      * @return
-     * @throws java.util.NoSuchElementException
+     * @throws java.util.NoSuchElementException throws if queue is empty
      */
     E dequeue();
+
+    /**
+     * return the oldest element from the queue
+     * @return
+     * @throws java.util.NoSuchElementException throws queue is empty
+     */
+    E peek();
 }

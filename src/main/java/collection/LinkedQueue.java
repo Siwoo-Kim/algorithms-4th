@@ -50,6 +50,13 @@ public class LinkedQueue<E> implements Queue<E> {
     }
 
     @Override
+    public E peek() {
+        if (isEmpty())
+            throw new NoSuchElementException();
+        return (E) first.val;
+    }
+
+    @Override
     public boolean isEmpty() {
         return first == null;
     }

@@ -45,6 +45,8 @@ public interface Sort<E> {
             return new MergeSort<>(elements);
         if ("Quick".equalsIgnoreCase(alg))
             return new QuickSort<>(elements);
+        if ("Heap".equalsIgnoreCase(alg))
+            return new HeapSort<>(elements);
         throw new UnsupportedOperationException();
     }
 }

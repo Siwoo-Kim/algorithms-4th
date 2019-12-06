@@ -57,6 +57,13 @@ public class ArrayQueue<E> implements Queue<E> {
     }
 
     @Override
+    public E peek() {
+        if (isEmpty())
+            throw new NoSuchElementException();
+        return elements[first];
+    }
+
+    @Override
     public boolean isEmpty() {
         return N == 0;
     }
