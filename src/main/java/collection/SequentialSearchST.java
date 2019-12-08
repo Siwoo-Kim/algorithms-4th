@@ -114,8 +114,8 @@ public class SequentialSearchST<K, V> implements SymbolTable<K, V> {
         return get(key) != null;
     }
 
-    public static final String TINY_FILE = "tinyST.txt";
-    public static final String LONG_FILE = "leipzig1M.txt";
+    private static final String TINY_FILE = "tinyST.txt";
+    private static final String LONG_FILE = "leipzig1M.txt";
 
     public static void main(String[] args) {
         SymbolTable<String, Integer> st = new SequentialSearchST<>();

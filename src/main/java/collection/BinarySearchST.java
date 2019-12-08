@@ -152,7 +152,6 @@ public class BinarySearchST<K extends Comparable<? super K>, V> implements Sorte
         N--;
         keys[N] = null; //help GC
         values[N] = null;
-        //resize as 1/2 full
         if (N > 0 && N == keys.length >> 2)
             ensureCapacity(keys.length >> 1);
     }
@@ -198,9 +197,8 @@ public class BinarySearchST<K extends Comparable<? super K>, V> implements Sorte
         }
     }
 
-
-    public static final String TINY_FILE = "tinyST.txt";
-    public static final String LONG_FILE = "leipzig1M.txt";
+    private static final String TINY_FILE = "tinyST.txt";
+    private static final String LONG_FILE = "leipzig1M.txt";
 
     public static void main(String[] args) {
         SymbolTable<String, Integer> st = new SequentialSearchST<>();

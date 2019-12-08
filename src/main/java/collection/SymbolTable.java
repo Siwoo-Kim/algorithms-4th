@@ -50,5 +50,4 @@ public interface SymbolTable<K, V> extends Iterable<K> {
      * @return
      */
     Iterable<K> keys();
-
 }

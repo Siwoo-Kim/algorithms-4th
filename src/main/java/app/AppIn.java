@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Scanner;
 
+import static org.assertj.core.util.Preconditions.checkArgument;
+import static org.assertj.core.util.Preconditions.checkNotNull;
+
 public final class AppIn {
 
     private static final AppIn SINGLETON = new AppIn();
@@ -25,17 +28,107 @@ public final class AppIn {
      * @return
      */
     public String[] readAllStrings(String filename) {
-        Queue<String> q = new LinkedQueue<>();
-        File file = AppResource.getInstance().getFile(filename);
-        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
-            while (scanner.hasNext())
-                q.enqueue(scanner.next());
-            String[] r = new String[q.size()];
-            for (int i=0; i<r.length; i++)
-                r[i] = q.dequeue();
-            return r;
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
+        checkNotNull(filename);
+        return Reader.of(filename, String.class).readAll();
+    }
+
+    /**
+     * Read all integers from given application file name.
+     *
+     * @param filename
+     * @return
+     */
+    public Integer[] readAllInts(String filename) {
+        checkNotNull(filename);
+        return Reader.of(filename, Integer.class).readAll();
+    }
+
+    /**
+     * Read all data of which has same data type from given file.
+     *
+     * @param <E>
+     */
+    private static abstract class Reader<E> {
+        private File file;
+
+        @SuppressWarnings("unchecked")
+        static <E> Reader<E> of(String filename, Class<E> clazz) {
+            checkNotNull(clazz);
+            if (clazz == String.class)
+                return (Reader<E>) new StringReader(filename);
+            else if (clazz == Integer.class)
+                return (Reader<E>) new IntReader(filename);
+            throw new UnsupportedOperationException();
+        }
+
+        private Reader(String fileName) {
+            checkNotNull(fileName);
+            file = AppResource.getInstance().getFile(fileName);
+            checkArgument(file.exists(), "File [%s] doesn't exists", fileName);
+        }
+
+        abstract boolean hasNext(Scanner scanner);
+
+        abstract E next(Scanner scanner);
+
+        abstract E[] newArrays(int size);
+
+        E[] readAll() {
+            Queue<E> q = new LinkedQueue<>();
+            try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
+                while (hasNext(scanner))
+                    q.enqueue(next(scanner));
+                E[] array = newArrays(q.size());
+                for (int i=0; i<array.length; i++)
+                    array[i] = q.dequeue();
+                return array;
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+    }
+
+    private static class IntReader extends Reader<Integer> {
+
+        private IntReader(String fileName) {
+            super(fileName);
+        }
+
+        @Override
+        boolean hasNext(Scanner scanner) {
+            return scanner.hasNextInt();
+        }
+
+        @Override
+        Integer next(Scanner scanner) {
+            return scanner.nextInt();
+        }
+
+        @Override
+        Integer[] newArrays(int size) {
+            return new Integer[size];
+        }
+    }
+
+    private static class StringReader extends Reader<String> {
+
+        private StringReader(String fileName) {
+            super(fileName);
+        }
+
+        @Override
+        boolean hasNext(Scanner scanner) {
+            return scanner.hasNext();
+        }
+
+        @Override
+        String next(Scanner scanner) {
+            return scanner.next();
+        }
+
+        @Override
+        String[] newArrays(int size) {
+            return new String[size];
         }
     }
 }
