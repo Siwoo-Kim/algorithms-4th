@@ -11,6 +11,11 @@ import java.util.Scanner;
 import static org.assertj.core.util.Preconditions.checkArgument;
 import static org.assertj.core.util.Preconditions.checkNotNull;
 
+/**
+ * The class {@code AppIn} supports for reading data from
+ * application file.
+ *
+ */
 public final class AppIn {
 
     private static final AppIn SINGLETON = new AppIn();
@@ -49,7 +54,7 @@ public final class AppIn {
      * @param <E>
      */
     private static abstract class Reader<E> {
-        private File file;
+        private final File file;
 
         @SuppressWarnings("unchecked")
         static <E> Reader<E> of(String filename, Class<E> clazz) {
