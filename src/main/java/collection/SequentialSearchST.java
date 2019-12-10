@@ -132,7 +132,7 @@ public class SequentialSearchST<K, V> implements SymbolTable<K, V> {
             if (words.length < minLength)
                 continue;
             if (st.contains(words[i]))
-                st.put(words[i], st.get(words[i] + 1));
+                st.put(words[i], st.get(words[i]) + 1);
             else
                 st.put(words[i], 1);
         }

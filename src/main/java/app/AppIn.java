@@ -6,6 +6,7 @@ import collection.Queue;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static org.assertj.core.util.Preconditions.checkArgument;
@@ -81,11 +82,15 @@ public final class AppIn {
         E[] readAll() {
             Queue<E> q = new LinkedQueue<>();
             try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
-                while (hasNext(scanner))
-                    q.enqueue(next(scanner));
+                while (hasNext(scanner)) {
+                    E e = Objects.requireNonNull(next(scanner));
+                    q.enqueue(e);
+                }
                 E[] array = newArrays(q.size());
-                for (int i=0; i<array.length; i++)
-                    array[i] = q.dequeue();
+                for (int i=0; i<array.length; i++) {
+                    E e = Objects.requireNonNull(q.dequeue());
+                    array[i] = e;
+                }
                 return array;
             } catch (Exception e) {
                 throw new IllegalStateException(e);
