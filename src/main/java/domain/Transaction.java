@@ -68,12 +68,7 @@ public class Transaction implements Comparable<Transaction> {
 
     @Override
     public int hashCode() {
-        final int R = 31;
-        int hash = 17;
-        hash = R * hash + who.hashCode();
-        hash = R * hash + when.hashCode();
-        hash = R * hash + Double.hashCode(amount);
-        return hash;
+        return Objects.hash(who, when, amount);
     }
 
     /**

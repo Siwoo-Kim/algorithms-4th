@@ -1,7 +1,5 @@
 package collection;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 public interface SymbolTable<K, V> extends Iterable<K> {
 
     /**
@@ -36,8 +34,7 @@ public interface SymbolTable<K, V> extends Iterable<K> {
      * @return
      */
     default boolean contains(K key) {
-        checkNotNull(key);
-        return get(key) != null;
+        return get(key) == null;
     };
 
     /**
