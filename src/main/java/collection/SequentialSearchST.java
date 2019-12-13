@@ -129,7 +129,7 @@ public class SequentialSearchST<K, V> implements SymbolTable<K, V> {
         final int minLength = 10;
         words = AppIn.getInstance().readAllStrings(LONG_FILE);
         for (int i=0; i<words.length; i++) {
-            if (words.length < minLength)
+            if (words[i].length() < minLength)
                 continue;
             if (st.contains(words[i]))
                 st.put(words[i], st.get(words[i]) + 1);
