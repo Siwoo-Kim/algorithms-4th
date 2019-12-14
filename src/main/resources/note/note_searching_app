@@ -1,0 +1,147 @@
+심볼 테이블 응용.
+    :심볼 테이블은 컴퓨팅에서 빠른 탐색 알고리즘을 제공하는 필수적인 역할을 수행.
+
+    심볼 테이블 응용의 예
+        1. 사전 (dictionary) 및 색인 (index) 클라이언트.
+        2. 색인 클라이언트로 부터 생성된 역순 색인
+        3. 희소 행렬 표현 (Sparse Matrix).
+
+        심볼 테이블은 컴퓨터 네트워킹, 패킷 라우팅, 웹 파일 공유, 웹 정보 관리 & 정리, 전자 상거래 상품 검색까지 많은 곳에서 응용.
+
+    심볼 테이블 구현의 선택.
+        :더 추가적인 요소가 필요한 경우가 아니라면 해싱을 선택.
+        BST 에 비해 해싱은 코드가 단순, 상수 시간의 탐색을 보증한다.
+        하지만 해시 테이블의 성능은 해시 함수에 영향받고, 해시 함수는 균일 분포 가정을 만족해야 한다.
+        레드-블랙 BST 은 최악 조건 성능을 보장할 수 있으며 더 많은 작업 (rank, select, sort, 범위 검색) 을 지원.
+                          평균 탐색     평균 삽입
+        레드 블랙 bst       lgN           lgN
+        개별 체이닝         N/(2M)         N/M
+
+    자바 라이브러리.
+        :TreeMap 은 레드-블랙 BST, HashMap 은 개별 체이닝 기반 심볼 테이블을 구현.
+        HashMap 의 부하 비율은 75% 을 강제한다.
+        IdentityHashMap 은 "참조의 동일성" 을 이용한다. (오직 동일성을 k1 == k2 로만 확인0
+
+    심볼 테이블의 클라이언트.
+        : 키를 미리 삽입하여 테이블을 생성 후, 테이블 기반으로 키 탐색 서비스를 제공.
+
+        전화번호부.
+            :키/쌍을 성명/전화번호으로 사용한 심볼 테이블.
+        사전.
+            :단어와 정의를 연관시켜 테이블 생성.
+        재무 정보.
+            :주식 종목 이름과 현재 가격을 연관시켜 사용자에게 정보 제공.
+            은행에선 거래자의 이름과 계좌번호를 연관시켜 관리.
+        컴파일러.
+            :변수 이름과 메모리 위치.
+        파일 시스템.
+            :파일명과 그 내용 (바이트)
+        DNS (domain name system)
+            :도메인 이름과 라우터 기계가 이해할 수 있는 IP 주소.
+        CSV 파일 (comma-separated-value).
+            :csv 파일은 사람이 쉽게 읽을 수 있으며, 미래 컴퓨팅의 영향을 적게 받은 형태로 데이터를 저장하는 목적의 데이터 포맷.
+
+    색인 (indexing) 클라이언트.
+        :키 하나에 여러 가지 값을 연관시킨 심볼 테이블을 "색인" 이라 한다.
+        => 여러 값들을 하나의 자료 구조에 저장하고 그 자료 구조를 값으로 하여 키와 연관시켜 색인을 생성.
+
+        상거래 정보.
+            :일별 거래를 추적 관리하기 위해 하루 동안의 거래 내력에 대한 색인을 유지.
+            이때 거래 계좌 번호가 키가 되고, 해당 계좌가 등장하는 거래 목록이 값.
+        웹 검색.
+            :어떤 검색어에 연관된 웹사이트 목록을 조회할 때 검색 엔진이 생성한 색인을 이용.
+            각 검색어(키) 마다 단 하나의 값(웹 사이트의 집합) 이 연관.
+        영화와 배우.
+            :영화 이름(키) 뒤에 그 영화의 출연 배우 목록(값)
+
+        반전된 색인
+            :값을 이용해 키를 찾는 경우.
+            여러가지 데이터를 대상으로 관심 있는 키의 위치를 검색.
+
+            인터넷 영화 DB (IMDB)
+                :영화 (키) 와 값이 (출연 배우 목록) 에서 반전된 색인은 거꾸로 출연한 영화 목록 (값) 을 가진 각각의 배우 (키) 를 가리킨다.
+            파일 탐색.
+                : 파일명(키) 와 데이터(값) 의 심볼 테이블에서 어떤 검색어(키)를 포함하고 있는 파일을 검색.
+
+            String[] lines = AppIn.getInstance().readAllLines(filename);
+            //색인 (하나의 키에 여러 값) 생성
+            SymbolTable<String, Queue<String>> st = new SeparateChainingHashST<>();
+            //반전된 색인
+            SymbolTable<String, Queue<String>> ts = new SeparateChainingHashST<>();
+            for (String line: lines) {
+                String[] words = line.split(splitter);
+                String key = words[0];
+                for (int i=1; i<words.length; i++) {
+                    String val = words[i];
+                    if (!st.contains(key)) st.put(key, new LinkedQueue<>());
+                    if (!ts.contains(val)) ts.put(val, new LinkedQueue<>());
+                    st.get(key).enqueue(val);
+                    ts.get(val).enqueue(key);
+                }
+            }
+            for (String query: queries) {
+                System.out.println(query);
+                if (st.contains(query))
+                    for (String s: st.get(query))
+                        System.out.println(" " + s);
+                if (ts.contains(query))
+                    for (String s: ts.get(query))
+                        System.out.println(" " + s);
+            }
+
+    희소 벡터 (Sparse vectors)
+        :행렬과 벡터의 곱셈.
+        => 결과 벡터의 i번째 항목의 값은 행렬의 i 번째 행을 피연산 벡터와 곱하는 백트의 내적 계산.
+        N x N 크기의 행렬에 곱하는 크기의 벡터 N 일때,
+        N 개의 결과 벡터 항목 각각의 i 에 대하여 N 번의 곱셈이 필요하기에 수행 시간은 N^2
+
+        만약 곱하는 행렬이 희소 행렬(행렬의 아주 많은 항목이 0) 일때,
+        i 행 j 열 항목에 Sparse Vector 객체 배열을 이용하면 N + '0 이 아닌 항목의 개수' 에 비례하게 할 수 있다.
+
+    집합 API SET API
+        :심볼-테이블에 값에 대한 작업이 아닌 오직 키의 집합에 대한 작업을 지원.
+        Set 은 합집합, 교집합, 여집합과 같은 집합 연산을 지원할 수 있으며, 심볼테이블과 마찬가지로
+        순차/비순차 버전이 있다.
+
+        public interface Set<E> {
+            /**
+             * Adds the {@code e} to the set
+             *
+             * @param e
+             * @throws IllegalArgumentException if {@code e} is {@code null}
+             */
+            void add(E e);
+
+            /**
+             * Removes the given {@code e} for the set.
+             *
+             * @param e
+             * @throws IllegalArgumentException if {@code e} is {@code null}
+             */
+            void remove(E e);
+
+            /**
+             * Returns true if the set contains the given {@code e}
+             *
+             * @param e
+             * @return
+             * @throws IllegalArgumentException if {@code e} is {@code null}
+             */
+            boolean contains(E e);
+
+            /**
+             * Returns true if the set is empty
+             *
+             * @return
+             */
+            boolean isEmpty();
+
+            /**
+             * Returns the number of elements in the set
+             * @return
+             */
+            int size();
+        }
+
+        Set 의 활용.
+            : 중복 제거 DeDup (de-duplication), 화이트 리스트 & 블랙 리스트.

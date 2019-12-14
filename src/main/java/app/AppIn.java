@@ -6,6 +6,7 @@ import collection.Queue;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.lang.reflect.Array;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -35,7 +36,14 @@ public final class AppIn {
      */
     public String[] readAllStrings(String filename) {
         checkNotNull(filename);
-        return Reader.of(filename, String.class).readAll();
+        Reader<String> reader = Reader.of(filename, Type.STRING);
+        return reader.readAll();
+    }
+
+    public String[] readAllLines(String filename) {
+        checkNotNull(filename);
+        Reader<String> reader = Reader.of(filename, Type.LINE);
+        return reader.readAll();
     }
 
     /**
@@ -46,7 +54,20 @@ public final class AppIn {
      */
     public Integer[] readAllInts(String filename) {
         checkNotNull(filename);
-        return Reader.of(filename, Integer.class).readAll();
+        Reader<Integer> reader = Reader.of(filename, Type.INTEGER);
+        return reader.readAll();
+    }
+
+    enum Type {
+        STRING(String.class),
+        LINE(String.class),
+        INTEGER(Integer.class);
+
+        private Class<?> clazz;
+
+        Type(Class<?> clazz) {
+            this.clazz = clazz;
+        }
     }
 
     /**
@@ -56,20 +77,26 @@ public final class AppIn {
      */
     private static abstract class Reader<E> {
         private final File file;
+        private final Type type;
+
 
         @SuppressWarnings("unchecked")
-        static <E> Reader<E> of(String filename, Class<E> clazz) {
-            checkNotNull(clazz);
-            if (clazz == String.class)
-                return (Reader<E>) new StringReader(filename);
-            else if (clazz == Integer.class)
-                return (Reader<E>) new IntReader(filename);
+        static <E> Reader<E> of(String filename, Type type) {
+            checkNotNull(type);
+            if (type == Type.STRING)
+                return (Reader<E>) new StringReader(filename, type);
+            else if (type == Type.LINE)
+                return (Reader<E>) new LineReader(filename, type);
+            else if (type == Type.INTEGER)
+                return (Reader<E>) new IntReader(filename, type);
             throw new UnsupportedOperationException();
         }
 
-        private Reader(String fileName) {
+        private Reader(String fileName, Type type) {
             checkNotNull(fileName);
+            checkNotNull(type);
             file = AppResource.getInstance().getFile(fileName);
+            this.type = type;
             checkArgument(file.exists(), "File [%s] doesn't exists", fileName);
         }
 
@@ -77,7 +104,9 @@ public final class AppIn {
 
         abstract E next(Scanner scanner);
 
-        abstract E[] newArrays(int size);
+        E[] newArrays(int size) {
+            return (E[]) Array.newInstance(type.clazz, size);
+        };
 
         E[] readAll() {
             Queue<E> q = new LinkedQueue<>();
@@ -100,8 +129,8 @@ public final class AppIn {
 
     private static class IntReader extends Reader<Integer> {
 
-        private IntReader(String fileName) {
-            super(fileName);
+        public IntReader(String filename, Type type) {
+            super(filename, type);
         }
 
         @Override
@@ -113,17 +142,12 @@ public final class AppIn {
         Integer next(Scanner scanner) {
             return scanner.nextInt();
         }
-
-        @Override
-        Integer[] newArrays(int size) {
-            return new Integer[size];
-        }
     }
 
     private static class StringReader extends Reader<String> {
 
-        private StringReader(String fileName) {
-            super(fileName);
+        private StringReader(String filename, Type type) {
+            super(filename, type);
         }
 
         @Override
@@ -135,10 +159,22 @@ public final class AppIn {
         String next(Scanner scanner) {
             return scanner.next();
         }
+    }
+
+    private static class LineReader extends Reader<String> {
+
+        private LineReader(String filename, Type type) {
+            super(filename, type);
+        }
 
         @Override
-        String[] newArrays(int size) {
-            return new String[size];
+        boolean hasNext(Scanner scanner) {
+            return scanner.hasNextLine();
+        }
+
+        @Override
+        String next(Scanner scanner) {
+            return scanner.nextLine();
         }
     }
 }
