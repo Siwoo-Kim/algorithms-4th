@@ -1,0 +1,250 @@
+그래프 Graph
+    소프트웨어에서 그래프의 활용 예.
+        지도 - 파리에서 로마까지 최단 경로는 어디인가?
+        웹자료 - 페이지와 다른 페이지로 연결된 링크.
+        전자 회로 - 전자 회로에서 "단락된 회로는 없는가?" 혹은 "서로 교차되는 선 없이 부품들을 연결할 수 있을까?"
+        스케쥴링 - 각 작업들을 어떤 순서대로 스케쥴링하면 가장 짧은 시간안에 제품을 생산할 수 있을까?
+
+    그래프의 모델.
+        무방향 그래프 Undirected graph
+        방향 그래프 Directed graph
+        간선-가중 그래프 Weighted-edge graph
+        간선-가중 방향 그래프 Weighted-edge directed graph
+
+    그래프의 정의
+        :그래프는 "정점의 집합"과 정점 두 개의 쌍을 연결하는 "간선"의 모음이다.
+         A graph is a set of vertices and a collection of edges that each connect a pair of vertices.
+
+    그래프 용어
+        다중 그래프
+            :다중 간선이 있는 그래프.
+        단순 그래프
+            :다중 간선 혹은 자기 순환이 없는 그래프.
+        Parallel-edge
+            :나란히 같은 쌍의 정점을 연결하는 복수의 간선.
+        Self-loop
+            Two edges are parallel if they connect the same pair of vertices.
+            :자기 자신으로 돌아와 연결되는 간선.
+             self-loop is an edge that connects a vertex to itself.
+        Adjacent to
+            :두 정점이 간선으로 연결되어 있다면 두 정점은 "서로 인접하다"라 한다.
+            When an edge connects two vertices, we say that the vertices are adjacent to one another
+        Degree
+            :정점에 부속된(연결된, incident) 간선의 갯수.
+            The degree of a vertex is the number of edges incident on it.
+        Subgraph
+            :그래프를 이루는 간선과 그 간선과 연결된 정점들의 부분 집합.
+            A subgraph is a subset of a graph's edges (and associated vertices) that constitutes a graph.
+        Path
+            :하나 이상의 간선으로 연결된 정점의 나열
+            A path in a graph is a sequence of vertices connected by edges, with no repeated edges.
+
+            Simple path
+                :반복된 정점이 없는 경로.
+            Cycle
+                : 출발 정점과 도착 정점이 같은 간선이 하나라도 존재하는 경로.
+                A cycle is a path (with at least one edge) whose first and last vertices are the same.
+                A - B - C - A - B (순환 A-B 의 중복)
+            Simple Cycle
+                : 출발/도착 정점을 제외한 반복되는 간선이나 정점이 없는 순환 경로.
+                A - B - C - A (반복되진 않지만 순환하므로 단순 순환)
+                A simple cycle is a cycle with no repeated vertices (other than the requisite repetition of the first and last vertices).
+
+        Connected
+            :어떤 두 정점을 모두 포함하는 경로가 존재하는 경우, 그중 한 정점이 다른 정점에 "연결되었다" 라 표현한다.
+            one vertex is connected to another if there exists a path that contains both of them.
+
+        Graph is connected
+            :그래프의 임의의 정점에서 모든 정점으로 향하는 경로가 항상 존재한다면 그 그래프는 "연결되었다" 라 한다.
+             graph is connected if there is a path from every vertex to every other vertex.
+
+        Connected Components
+            :연결된 그래프가 아닌 그래프에서, 서로 "연결"된 정점들이 모두 모인 서브그래프를 "연결 컴포넌트" 라 한다.
+            이때 전체 그래프는 연결 컴포넌트의 집합이 된다.
+            A graph that is not connected consists of a set of connected components,
+            which are maximal connected subgraphs.
+
+        Acyclic graph
+            :순환 경로가 존재하지 않은 그래프.
+            An acyclic graph is a graph with no cycles.
+
+        Tree
+            :연결된 비순환 그래프.
+            A tree is an acyclic connected graph.
+
+        Forest
+            :중첩되지 않은 트리들의 집합
+            A forest is a disjoint set of trees.
+
+        Spanning Tree
+            :어떤 연결된 그래프에서 대해서 그에 속한 모든 정점들을 포함하는 트리.
+
+        Spanning Forest
+            :연결 컴포넌트들 각각에 대한 신장 트리들의 집합.
+
+        V개의 정점을 가진 그래프 G은 다음의 다섯 가지를 만족하면 tree 에 부합한다.
+            1. G 는 V-1 간선을 가지며 순환 경로가 없다. (G is a acyclic grpah.)
+            2. G 는 V-1 간선을 가지며 연결되어 있다. (G is a connected graph.)
+            3. G 은 연결되어 있지만, 어떤 간선이든 하나를 제거하면 연결이 끊어진다.
+            4. G 은 비순환 그래프지만, 어떤 두 정점이든 간선 하나를 추가하면 순환 경로가 생긴다.
+            5. G 의 임의의 두 정점을 연결하는 경로는 모든 경우에 있어 하나만 존재한다.
+
+        bipartite graph 이분 그래프
+            :두 그룹으로 나누어진 정점의 집합을 각 간선이 한 집합과 다른 집합을 연결하도록 구성된 그래프.
+            A bipartite graph is a graph whose vertices we can divide into two sets such that all edges connect a vertex in one set with a vertex in the other set.
+
+무방향 그래프 Undirected Graph
+    : 간선이 양방향을 모두 가리키는 그래프. (방향성을 안가진 간선들의 그래프)
+
+    무방향 그래프 API
+        public interface Graph<E> {
+
+            /**
+             * number of vertices
+             * @return
+             */
+            int vertices();
+
+            /**
+             * number of edges
+             * @return
+             */
+            int edges();
+
+            /**
+             * add edge v-w to the graph
+             * @param v
+             * @param w
+             */
+            void addEdge(E v, E w);
+
+            /**
+             * vertices adjacent to given {@code v}
+             * @param v
+             * @return
+             */
+            Iterable<E> adjacent(E v);
+        }
+
+    그래프의 구현 (표현 방식)
+        :인접 행렬 (V x V 크기의 boolean 타입 배열) 혹은 인접-리스트 (adjacent list)의 배열구조.
+
+        그래프의 구현 고려사항.
+            1. 실제 응용에서 만날 수 있는 여러 가지 그래프 형태에 대해 높은 수준의 공간 효율성.
+            2. 클라이언트에서 사용될 Graph 인스턴스 메서드들의 빠른 속도로 동작 하도록 하는 시간 효율성.
+
+        인접 리스트 배열 자료구조. Array of Adjacent List
+            : 밀집하지 않은 그래프에서의 표준적 자료구조.
+            Adjacency-lists representation, where we maintain a vertex-indexed array of lists of the vertices connected
+            by an edge to each vertex.
+
+            각 정점마다 그에 Adjacent 한 정점의 목록을 연결리스트로 관리.
+            연결리스트는 배열에 담아 관리.
+
+            인접 리스트 배열의 성능 특성.
+                1. 공간 사용량이 V + E 에 비례.
+                2. 간선을 추가하는데 상수 시간이 소요.
+                3. 정점 v에 Adjacent vertices 목록 순회하는데 소요되는 시간은 정점 v 의 degree 에 비례.
+
+            부가적인 API
+                정점의 추가, 정점의 삭제. : SymbolTable 사용.
+                간선의 삭제, 간선 v-w 의 존재 여부 검사.  : Set 을 사용.
+
+        각 그래프의 구현에 따른 성능.
+                        공간 성능       간선 추가   w-v 의 인접 여부 검사      v에 인접한 정점 순회
+            인접 행렬       V^2            1             1                       V
+            인접리스트      E+V            1          degree(v)                 degree(v)
+
+    그래프 처리 디자인 패턴.
+        : 각각의 그래픠의 표현 방법과 알고리즘의 구현을 서로 분리하기 위한 설계.
+
+        그래프 처리 알고리즘
+            1. 연결 정점 찾기 (Connected Vertices)
+                :주어진 그래프에서, 특정 두 정점이 연결되어 있는가? 그리고 연결된 컴포넌트의 갯수는 몇개인가?
+
+                연결 정점 찾기 알고리즘.
+                    Union-Find, DFS, BFS
+
+                    DFS (Depth-first Search)
+                        :그래프의 탐색을 위한 알고리즘 중 하나로 재귀를 통해 정점을 순회.
+                        임의의 노드에서 시작해서 다음 분기(branch)로 넘어가기 전에 해당 분기를 완벽하게 탐색하는 방법
+
+                        1. 현재 정점에 대해 방문했다는 표시를 한다.
+                        :Mark it as having been visited.
+                        2. 인접한 정점 중에 방문하지 않은 정점을 재귀적으로 방문한다.
+                        :Visit (recursively) all the vertices that are adjacent to it and that have not yet been marked.
+
+                    DFS 의 성능
+                        :DFS 은 주어진 정점에 연결된 모든 정점을 모두 방문 표시하는데
+                        그 정점들의 차수에 비례하는 시간 소요한다.
+                        => 무방향 그래프에서의 DFS 은 연결된 모든 정점에 대해 2번씩 방문한다.
+
+            2. 경로 찾기 (Paths)
+                :어떤 그래프와 원점 s 가 주어져 있을 때 그 정점에서 다른 정점 v 로 가는 Path 가 존재하는가?
+                만약 존재한다면 그 경로중에서 가장 짧은 경로가 무엇인가?
+
+
+                경로 찾기 알고리즘.
+                    DFS 을 이용한 경로 찾기.
+                        찾아낸 각 정점으로의 경로를 저장하기 위한 배열 edgeTo[] (원소가 숫자일때) 혹은 SymbolTable<E, E> 을 이용한다.
+
+                        정점 w로 이끄는 어떤 간선 v-w 을 처음 만날 때 edgeTo[w] 을 v 로 세팅.
+                            :이째 v-w 은 s에서 w로 가는 경로의 마지막 간선이다.
+                        이때 만들어진 경로 edgeTo[] 은 원점을 뿌리로 하는 트리가 만들어진다.
+
+                    BFS (Breadth-first Search)
+                        :그래프의 탐색을 위한 알고리즘 중 하나로 DFS 와 달리, 각 간선의 깊이의 해당하는 모든 정점을 탐색 한 후
+                        다음 깊이의 간선을 탐색.
+                        즉 간선 2개를 이동해서 갈 수 있는 범위 안의 정점을 검사 후, 간선 3개, 4개 식으로 이동 범위를 넓혀가며 검사.
+
+                        DFS 은 한명의 사람이 미로를 찾아 헤매는 과정과 비슷하다.
+                            :DFS 에서는 이러한 목적으로 스택 (LIFO) 규칙을 이용해 가까운 통로부터 완전 탐색한다.
+                        BFS 은 여로 명의 사람들이 각기 서로 다른 갈림길로 흩어져서 길을 찾는 것과 비슷하다.
+                            :BFS 에서는 이러한 목적으로 큐 (FIFO) 규칙을 이용해 탐험할 새로운 통로로 가장 오랜전에 만났던 통로를 선택한다.
+
+                        BFS 알고리즘.
+                            1. 큐에서 다음 정점 v 를 꺼내고 제거한다.
+                            2. v 에 인접한 정점들 중에서 방문 표시되지 않은 정점들에 대해 큐에 삽입한다.
+
+                        BFS 명제
+                            : s 에 connected 된 임의의 정점 v 에 대해, BFS 는 s 에서 v 로의 최단 경로을 구한다.
+                            : BFS 는 V+E 에 비례하는 최악 조건 성능을 가진다.
+
+                    DFS 와 BFS 의 공통점
+                        :자료구조를 적절히 선택한다.
+
+                        1. 자료 구조에서 방문 표시되지 않은 정점 v 를 꺼내고 방문 표시한다.
+                        2. 정점 v 에 인접한 정점 중 방문 표시되지 않은 것을 자료 구조에 넣는다.
+
+            3. 연결 컴포넌트 찾기.
+                : 해당 그래프에서의 연결 컴포넌트를 찾아라.
+
+                Connected Component.
+                    "~이 ~에 연결되다" 은 것은 동치 관계를 의미한다.
+                    즉, 정점들을 동치류(서로 연결된 하나의 그룹, 집합)으로 분류.
+
+                연결 컴포넌트 찾기 알고리즘.
+                    DFS, BFS, UF
+
+                DFS 을 이용한 CC 식별.
+                    : 추가 정점을 인덱스로 하는 배열 id[] 혹은 SymbolTable 에 각 정점들의 식별 번호를 저장한다.
+                    각 단계에서 id 을 정하고 재귀 호출마다 방문하는 모든 정점 v 에 대해 해당 id 를 부여한다.
+
+                DFS 을 이용한 CC 식별 명제.
+                    :DFS 은 V+E 에 비례하는 별도의 전처리 시간과 공간을 소요하여
+                    그래프의 연결 상태 조회에 상수 시간 성능을 제공한다.
+
+                CC 식별에서의 Union-Find vs DFS
+                    : 비록 DFS 가 상수 시간 보증하더라도, Union-Find 은 그래프에 대한 표현을 생성할 필요가 없으므로 더 빠르다.
+                    따라서, 많은 수의 연결성 조회가 새로운 간선의 추가 (동적 연결성)와 뒤섞여 있다면 Union-Find 을 사용.
+
+            4. 순환 탐지.
+
+
+
+
+
+
+
+
+

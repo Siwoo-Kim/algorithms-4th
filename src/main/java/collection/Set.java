@@ -1,6 +1,6 @@
 package collection;
 
-public interface Set<E> {
+public interface Set<E> extends Iterable<E> {
 
     /**
      * Adds the {@code e} to the set

@@ -1,8 +1,5 @@
 package collection;
 
-
-import org.checkerframework.checker.units.qual.K;
-
 import java.util.Iterator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -270,6 +267,10 @@ public class TreeSet<E extends Comparable<? super E>> implements Set<E> {
         return map.floor(e);
     }
 
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
 
     public static void main(String[] args) {
         TreeSet<String> set = new TreeSet<>();
