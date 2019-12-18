@@ -137,6 +137,6 @@ public interface Graph<E> {
             for (E adj: adjacent(v))
                 if (v.equals(adj))
                     cnt++;
-        return cnt / 2; //
+        return cnt / 2; //double count
     }
 }

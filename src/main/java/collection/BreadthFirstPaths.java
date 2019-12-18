@@ -1,60 +1,90 @@
 package collection;
 
+import app.AppIn;
+import sun.dc.pr.PRError;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class BreadthFirstPaths<E> implements Paths<E> {
+/**
+ * The {@code Paths} interface represents a data type for finding paths
+ * from a given source {@link Paths#source()} to every other vertex in an graph.
+ *
+ */
+ class BreadthFirstPaths<E> implements Paths<E> {
 
-    private final Object NULL = new Object();
+    private static final Object NULL = new Object();    //root path
     private final SymbolTable<E, Object> pathTo;
     private final E source;
 
-    public BreadthFirstPaths(E source, Graph<E> G) {
-        this.source = source;
+    BreadthFirstPaths(E source, Graph<E> G) {
+        checkNotNull(source, G);
         pathTo = new SeparateChainingHashST<>();
-        pathTo.put(source, NULL);
+        pathTo.put(source, NULL); // set root path
+        this.source = source;
         bfs(source, G);
     }
 
     private void bfs(E source, Graph<E> G) {
-        SymbolTable<E, Object> visited = new SeparateChainingHashST<>();
         Queue<E> q = new LinkedQueue<>();
-        visited.put(source, new Object());
         q.enqueue(source);
         while (!q.isEmpty()) {
-            E vertex = q.dequeue();
-            for (E adj: G.adjacent(vertex)) {
-                if (!visited.contains(adj)) {
-                    visited.put(adj, new Object());
+            E v = q.dequeue();
+            for (E adj: G.adjacent(v)) {
+                if (!pathTo.contains(adj)) {
                     q.enqueue(adj);
-                    pathTo.put(adj, vertex);
+                    pathTo.put(adj, v);
                 }
             }
         }
     }
 
+
     @Override
     public boolean hasPathTo(E v) {
         checkNotNull(v);
         return pathTo.contains(v);
+
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Iterable<E> pathTo(E v) {
         checkNotNull(v);
         if (!hasPathTo(v))
-            return new LinkedQueue<>();
-        Queue<E> q = new LinkedQueue<>();
+            return new LinkedStack<>();
+        Stack<E> stack = new LinkedStack<>();
         Object path = v;
         while (path != NULL) {
-            q.enqueue((E) path);
+            stack.push((E) path);
             path = pathTo.get((E) path);
         }
-        return q;
+        return stack;
+
     }
 
     @Override
     public E source() {
         return source;
+    }
+
+    /**
+     * ======================== TEST METHOD ======================
+     */
+    private static final String TINY_DG_TXT = "tinyDG.txt";
+
+    public static void main(String[] args) {
+        Integer[] ints = AppIn.getInstance().readAllInts(TINY_DG_TXT);
+        Digraph<Integer> G = new DirectedGraph<>();
+        for (int i=2; i<ints.length;)
+            G.addEdge(ints[i++], ints[i++]);
+
+        Paths<Integer> bfs;
+        for (Integer v: G.vertices()) {
+            bfs = new BreadthFirstPaths<>(v, G);
+            for (Integer w : G.vertices()) {
+                if (bfs.hasPathTo(w)) {
+                    System.out.println(bfs.pathTo(w));
+                }
+            }
+        }
     }
 }

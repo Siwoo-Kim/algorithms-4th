@@ -1,5 +1,7 @@
 package collection;
 
+import app.AppIn;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -8,24 +10,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @param <E>
  */
-public class DepthFirstSearch<E> implements Search<E> {
+class DepthFirstSearch<E> implements Search<E> {
 
-    private final SymbolTable<E, Object> visited;   //connected vertices
-    private final E source; // source vertex
+    private static final Object O = new Object(); // dummy object
+    private final SymbolTable<E, Object> visited;
+    private final E source;
 
     public DepthFirstSearch(E source, Graph<E> G) {
         checkNotNull(source, G);
-        this.source = source;
         visited = new SeparateChainingHashST<>();
-        dfs(G, source);
+        this.source = source;
+        dfs(source, G);
     }
 
-    private void dfs(Graph<E> G, E source) {
-        checkNotNull(G, source);
-        visited.put(source, new Object());
+    private void dfs(E source, Graph<E> G) {
+        checkNotNull(source);
+        visited.put(source, O);
         for (E adj: G.adjacent(source))
             if (!visited.contains(adj))
-                dfs(G, adj);
+                dfs(adj, G);
     }
 
     @Override
@@ -42,5 +45,27 @@ public class DepthFirstSearch<E> implements Search<E> {
     @Override
     public E source() {
         return source;
+    }
+
+    /**
+     * ======================== TEST METHOD ======================
+     */
+    private static final String TINY_DG_TXT = "tinyDG.txt";
+
+    public static void main(String[] args) {
+        Integer[] ints = AppIn.getInstance().readAllInts(TINY_DG_TXT);
+        Digraph<Integer> G = new DirectedGraph<>();
+        for (int i=2; i<ints.length;)
+            G.addEdge(ints[i++], ints[i++]);
+
+        DepthFirstSearch<Integer> dfs = new DepthFirstSearch<>(0, G);
+        for (Integer v: G.vertices())
+            if (dfs.connected(v))
+                System.out.print(v + " ");
+        System.out.println();
+        dfs = new DepthFirstSearch<>(9, G);
+        for (Integer v: G.vertices())
+            if (dfs.connected(v))
+                System.out.print(v + " ");
     }
 }

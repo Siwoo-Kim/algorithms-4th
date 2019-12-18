@@ -1,7 +1,6 @@
 package collection;
 
 /**
- * @param <E>
  * The {@code Paths} interface represents a data type for finding paths
  * from a given source {@link Paths#source()} to every other vertex in an graph.
  *
