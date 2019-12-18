@@ -1,0 +1,145 @@
+Digraph
+    : Dirgraph 은 정점 (Vertex) 과 방향을 가진 간선 (Directed Edge) 의 집합.
+    각각의 방향 간선은 순서를 가진 두 정점 쌍을 연결.
+    A directed graph (or digraph) is a set of vertices and a collection of directed edges that each connects an ordered pair of vertices.
+
+    방향 그래프의 응용.
+        1.웹컨텐츠(페이지-하이퍼링크)
+        2.학술(논물-인용)
+        3.작업(작업-선행조건)
+
+    Digraph 용어
+        out-degree
+            :나가는 방향의 간선의 수.
+            the number of edges pointing from it.
+        in-degree
+            :들어오는 방향의 간선의 수
+            the number of edges pointing to it.
+        tail
+            : v->w 간선에서 첫 번째 정점.
+        head
+            : v->w 간선에서 두 번째 정점.
+        directed path
+            :연결되는 간선의 방향을 따라 나열된 일련의 정점.
+            A sequence of vertices in which there is a (directed) edge pointing from each vertex in the sequence to its
+            successor in the sequence, with no repeated edges.
+
+        directed cycle
+            :출발 정점과 도착 정점이 같은 directed path.
+            A directed cycle is a directed path (with at least one edge) whose first and last vertices are the same.
+
+        reachable
+            : 정점 v가 w 로의 directed path 가 존재한다면 "v 에서 w 로 reachable 하다"라고 한다.
+            A vertex w is reachable from a vertex v if there exists a directed path from v to w.
+
+        strongly connected
+            : 정점 v 와 w 가 directed path 을 따라 상호 도달 가능하다면 "v 와 w 은 strongly connected" 라 한다.
+
+        Digraph is strongly connected
+            : 임의의 정점 v 에서 모든 정점에 도달 가능한 경로가 존재할 경우 "해당 Digraph 은 strongly connected" 라 한다.
+
+    방향 그래프의 알고리즘.
+        :도달성 (reachable) 찾기,
+
+        도달성 찾기.
+            :주어진 방향 그래프와 원점 s 에 대해, s로부터 어떤 정점 v 로의 방향 경로가 존재하는가?
+
+            도달성 찾기 알고리즘.
+                :Depth First Search 을 이용하여, 각 원점마다 재귀를 호출하여 도달 가능한 정점들에 모두 방문 표시한다.
+
+            도달성 찾기 성능.
+                :방향 그래프에서 DFS 을 이용해 주어진 정점 집합에서 접근 가능한 정점들을 모두 표시할 때,
+                표시된 정점들의 out-degree 의 합에 비례하는 실행 시간을 소요한다.
+
+            도달성 찾기의 응용.
+                : 가바지 컬렉션(Garbage Collection) 의 "표시하고 훑기"
+
+                표시하고 훑기
+                    : 메모리 회수를 위한 전략으로 프로그램에 의해 사용되는 객체에 대해
+                    비트 하나를 표시용으로 남겨주고, 객체를 정점으로 하는 방향 그래프에 대해 주기적으로 DFS 알고리즘을 수행하여
+                    잠재적으로 참조될 수 있는 객체를 표시한다. 전체 객체를 훑어 표시되지 않은 객체들에 대해 메모리를 회수한다.
+
+        스케쥴링 문제.
+            : 어떤 작업들의 집합과 선행 제약 조건의 집합이 있을 때 제약 조건들을 만족시키도록 작업을 배치하는 문제.
+            ex) 수강 신청 (과목-선행학습요건)
+
+            주어진 방향 그래프가 방향 순환 (Directed Cycle) 이 없는지 확인한 후 없다면 위상 정렬 (Topological Sort) 한다.
+
+        순환 탐지하기. (DAG)
+            :주어진 방향 그래프에서 방향 순환이 존재하는가? 존재한다면 순환을 이루는 정점들을 순환 순서대로 구하라.
+            해당 그래프가 DAG (Directed acyclic graph) 인가?
+
+            DAG 비순환 방향 그래프.
+                :DAG (directed acyclic graph) 은 방향 순환 경로가 존재하지 않은 그래프이다.
+
+            순환 탐지 알고리즘.
+                :DFS 와 재귀 호출 과정 동안 스택에서의 방향 경로를 이용한다.
+                v->w 재귀 호출에서 w 가 이미 스택에 존재한다면 순환을 찾은 것이다.
+                스택 자체가, w->v 로 가는 경로가 존재하므로, 현재 호출 v->w 로 인해 순환이 완성된다.
+
+            Topological Sort 위상 정렬
+                : 어떤 방향 그래프가 주어질 때, 간선이 가리키는 한 방향으로만 모든 정점을 정렬.
+                이때, 뒤의 정점은 앞의 정점을 연결되는 경우가 없도록 정렬한다.
+
+        Topological 위상 순서 구하기.
+            :주어진 방향 그래프 DAG 라면 위상 정렬 순서는 무엇인가?
+            이때 방향 그래프의 위상 순서를 구하기 위해선 DAG 가 필요충분조건이다.
+
+            Topological 위상 순서 알고리즘.
+                :dfs 와 스택을 이용.
+                Depth First Search 의 재귀가 호출될 때마다 각 정점을 정확히 한 번씩만 방문한다는 사실에 기반을 둔다.
+                순회 순서는 자료 구조의 특성과 각 정점이 재귀 함수 안에서 저장되는 시점을 따라 결정된다.
+
+                세 가지 저장시점.
+                    pre-order: 재귀 호출전에 큐를 이용해 정점을 저장.
+                    post-order: 재귀 호출후에 큐를 이용해 정점을 저장.
+                    reversed post-order: 재귀 호출후에 스택을 이용해 정점을 저장.
+
+                DAG 에서 reversed post-order 는 Topological 위상 순서이다.
+                    :dfs(v) 가 호출되면 모든 간선 v-w 에 대해 다음의 두 조건 중 하나가 만족한다.
+                    1. dfs(w) 가 이미 호출되었고 리턴되었다.
+                    2. dfs(w) 가 아직 호출되지 않았다. 따라서 v->w 는 dfs(v) 가 리턴하기 전에 dfs(w) 가 호출되도록 한다.
+
+                    위의 증명으로 dfs(w) 가 dfs(v) 에 우선하여 완료된다.
+                    따라서 post-order 에서는 w 가 v 보다 앞서 저장되고,
+                    reversed post-order 에서는 w 가 v 뒤에 저장된다. (스택이므로)
+                    따라서, 목적하는 바대로, 위상 정렬된 상태에서는
+                    각 간선 v->w 은 항상 순서상 앞에 있는 정점 v 은 순서당 뒤에 있는 w 정점을 가리킨다.
+
+            Strongly Connected Component 찾기.
+                : 주어진 방향 그래프에서 정점 v 와 w 가 상호 도달가능한가? (strongly connected)
+                또한 정점 v 가 속한 Strongly Connected Component 의 식별자는 무엇인가?
+
+                Strongly Connected Component 찾기 알고리즘.
+                    :Kosaraju-Sharir 알고리즘.
+
+                    1. 주어진 방향 그래프 G의 반전 방향 그래프 GR 에 대해 반전된 후행 순서를 구한다.
+                    2. G에 표준 DFS 을 수행하되, 앞서 구한 순서에서 방문 표시되지 않은 정점을 대상으로 실행한다.
+                    3. 호출된 루트 재귀 메서드 dfs() 에 의해 방문된 모든 정점에 대해 하나의 Strongly Connected Component 에 속하게 한다.
+
+                    Kosaraju-Sharir 알고리즘.
+                        : kernal DAG 란 개념을 이용한다.
+                        keranl DAG 란 각각의 강한 컴포넌트를 대표하는 추상적 정점만 남기고 여분의 정점들을 소거한 축약된 DAG 을 의미한다.
+                        이때 이렇게 축약된 방향 그래프 kernal DAG 는 DAG 가 될 수 밖에 없다. (방향 순환이 남아 있다는 것은 더 큰 강한 컴포넌트가 존재함을 의미하므로)
+                        이렇게 구한 kernal DAG 의 반전된 위상 정렬 순서로부터 강한 컴포넌트를 식별.
+
+                            1. 커널 DAG 의 sink 컴포넌트에 속한 정점을 찾는다. 그 정점에서 dfs 을 수행하면 정확히 해당 컴포넌트에 속한 정점만 방문한다.
+                            2. 방문 한 정점을 소거하고, 다시 남아 있는 커널 DAG 에서 배출 컴포넌트에 속한 정점을 찾아 컴포넌트 식별 과정을 반복한다.
+
+                        kernal DAG 의 sink 컴포넌트.
+                            G 의 반전된 후행 순서의 첫 번째 정점은 source 컴포넌트 (유입)이다. (in-degree 가 0 이므로)
+                            그러므로 GR 의 반전된 후행 순서는 sink 컴포넌트 (배출)이다. (G의 방향성을 뒤집었으므로)
+
+            이행적 폐쇄 (transitive closure) 찾기.
+
+                이행적 폐쇄.
+                    :어떤 방향 그래프 G의 이행적 폐쇄는 G와 동일한 정점 집합을 가지는 그래프이되,
+                    G에서 정점 v와 정점 w로 도달 가능할 때만 간선 v->w 가 존재하는 방향 그래프이다.
+                     The transitive closure of a digraph G is another digraph with the same set of vertices, but with an edge from v to w if and only if w is reachable from v in G.
+
+                    이행적 폐쇄를 위해 행렬로 그래프를 표현.
+                    즉, v 에서 w 로 도달 가능한 경우 v 행 w 열의 값을 true 로 세팅.
+                    이때 도달성의 조회 시간은 상수 시간이다.
+
+
+
