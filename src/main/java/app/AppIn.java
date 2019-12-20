@@ -14,9 +14,8 @@ import static org.assertj.core.util.Preconditions.checkArgument;
 import static org.assertj.core.util.Preconditions.checkNotNull;
 
 /**
- * The class {@code AppIn} supports for reading data from
- * application file.
- *
+ * The class {@code AppIn} is singleton class that supports reading data
+ * as with number and string from application file.
  */
 public final class AppIn {
 
@@ -58,10 +57,23 @@ public final class AppIn {
         return reader.readAll();
     }
 
+    /**
+     * Read all doubles from given application file name.
+     *
+     * @param filename
+     * @return
+     */
+    public Double[] readAllDoubles(String filename) {
+        checkNotNull(filename);
+        Reader<Double> reader = Reader.of(filename, Type.DOUBLE);
+        return reader.readAll();
+    }
+
     enum Type {
         STRING(String.class),
         LINE(String.class),
-        INTEGER(Integer.class);
+        INTEGER(Integer.class),
+        DOUBLE(Double.class);
 
         private Class<?> clazz;
 
@@ -89,6 +101,8 @@ public final class AppIn {
                 return (Reader<E>) new LineReader(filename, type);
             else if (type == Type.INTEGER)
                 return (Reader<E>) new IntReader(filename, type);
+            else if (type == Type.DOUBLE)
+                return (Reader<E>) new DoubleReader(filename, type);
             throw new UnsupportedOperationException();
         }
 
@@ -141,6 +155,23 @@ public final class AppIn {
         @Override
         Integer next(Scanner scanner) {
             return scanner.nextInt();
+        }
+    }
+
+    private static class DoubleReader extends Reader<Double> {
+
+        private DoubleReader(String filename, Type type) {
+            super(filename, type);
+        }
+
+        @Override
+        boolean hasNext(Scanner scanner) {
+            return scanner.hasNextDouble();
+        }
+
+        @Override
+        Double next(Scanner scanner) {
+            return scanner.nextDouble();
         }
     }
 

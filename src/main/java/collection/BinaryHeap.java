@@ -33,7 +33,7 @@ public class BinaryHeap<E extends Comparable<? super E>> implements PriorityQueu
 
     @Override
     public void enqueue(E e) {
-        if (N == heap.length)
+        if ((N+1) == heap.length)
             ensureCapacity(N << 1);
         heap[++N] = e;
         swim(N);    //do reheapify
@@ -68,8 +68,7 @@ public class BinaryHeap<E extends Comparable<? super E>> implements PriorityQueu
     private void ensureCapacity(int capacity) {
         @SuppressWarnings("unchecked")
         E[] newHeap = (E[]) new Comparable[capacity];
-        for (int i=0; i<=N; i++)
-            newHeap[i] = heap[i];
+        System.arraycopy(heap, 1, newHeap, 1, N);
         heap = newHeap;
     }
 
